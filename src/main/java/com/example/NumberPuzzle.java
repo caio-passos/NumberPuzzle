@@ -56,7 +56,7 @@ public class NumberPuzzle extends Application {
                                                                             //utilizando o método para criar um eventListener para cada Label. 
                                                                             // a classe EventHandler é utilizada para trocar o label para o lugar da Empty Label
                         public void handle(MouseEvent event) { //Passando o parametro para o MouseEvent
-                            Label clickedLabel = (Label) event.getSource(); //Recebe o clique em cada label 
+                            Label clickedLabel = (Label) event.getSource(); //Recebe o clique em cada label. *Incrementar o contador a partir deste evento 
                             int clickedRow = GridPane.getRowIndex(clickedLabel); //Recebe a label da e linha do Label que recebeu o clique 
                             int clickedCol = GridPane.getColumnIndex(clickedLabel); //Recebe a label da coluna do Label que recebeu o clique 
                             if (isValidMove(clickedRow, clickedCol)) { //Se for um movimento válido(se pode ser movimentado para o espaço vazio)
