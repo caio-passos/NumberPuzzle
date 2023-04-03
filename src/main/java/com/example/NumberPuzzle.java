@@ -10,8 +10,10 @@ import javafx.scene.input.MouseEvent; // Esta biblioteca fornece a classe MouseE
 import javafx.scene.layout.GridPane; // Esta biblioteca fornece a classe GridPane, que é um gerenciador de layout que organiza nós em um padrão de grade.
 import javafx.stage.Stage; // Esta biblioteca fornece a classe Stage, que representa o contêiner de nível superior para uma aplicação JavaFX.
 import javafx.scene.control.Alert; //Esta biblioteca fornece a classe Alerta, que permite exibir mensagens atraves de uma GUI do JavaFX
+import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;  //Esta biblioteca fornece a classe Alerta, que permite exibir e escrever mensagens atraves de uma GUI do JavaFX
 
+//https://www.youtube.com/watch?v=Lv27qRTxaSU
 
 public class NumberPuzzle extends Application {
     private static final int ROWS = 4; // Definindo numero de linhas
@@ -30,6 +32,11 @@ public class NumberPuzzle extends Application {
 
         int[][] nums = new int[ROWS][COLS]; //Instanciando um array 2D para criação da matriz de linhas e colunas 
 
+        Label labelCount = new Label();
+        labelCount.setText("Você ainda não jogou");
+        int clickCounter = 0; 
+        
+        
         // gera uma sequência aleatória de números de 1 a 15
         int[] sequence = new int[ROWS * COLS - 1];
         for (int i = 0; i < sequence.length; i++) {
@@ -65,20 +72,37 @@ public class NumberPuzzle extends Application {
                                 emptyCol = clickedCol; //então, a coluna vazia será atribuida a linha clickada
                             }
                         }
-                    });
+
+            });
                     //Contador deve entrar por aqui.
                     grid.add(label, j, i); //Uma instancia do GridPane, nos argumentos do método Add(): Label a ser adicionado, Linha e coluna da celula onde o label deve ser adicionado
                 }
             }
+            
         }
 
         Scene scene = new Scene(grid, COLS * TILE_SIZE, ROWS * TILE_SIZE); //Instanciando uma nova cena, o próprio quebra cabeça com tamanho, linhas e colunas 
         primaryStage.setScene(scene); //Define a cena 
-        primaryStage.setTitle("Number Puzzle"); //Dá nome a cena 
-        //Observar para implementar o contador
-        primaryStage.show(); //Exibe a cena 
-    }
+        primaryStage.setTitle("Number Puzzle");
 
+        public void ClickButtonMethod extends MouseClick(){
+            labelCount.setText("Você não jogou" ); 
+            clickCounter ++;
+            
+            if (labelCount == 1 ){
+                labelCount.setText("Você jogou uma vez");
+            }else{
+                labelCount.setText("Você jogou" + clickCounter + "vezes");
+            }
+        }
+     
+      //Dá nome a cena 
+        //Observar para implementar o contador
+        
+        
+        primaryStage.show(); //Exibe a cena 
+    
+        }
     // Verifica se o bloco clicado pode ser movido
     private boolean isValidMove(int row, int col) {  //Verifica se pode mover, verificando cada lado do label, sendo possível, retornará true, senão, false.
         if (row == emptyRow && col == emptyCol - 1 || // verifica se as linhas e as colunas possuem o mesmo valor em quantia. 
