@@ -116,26 +116,27 @@ public class NumberPuzzle extends Application {
     }
 }
 
-public void endGame(int[][] nums) {
-    if (nums[ROWS - 1][COLS - 1] == 0) {
-        boolean ascending = true;
-        for (int l = 0; l < ROWS; l++) {
-            for (int a = 0; a < COLS - 1; a++) {
-                if (nums[l][a] > nums[l][a + 1]) {
-                   ascending = false;
-                    break;
+public void endGame(int[][] nums) { //Estrutura para o final do game 
+    if (nums[ROWS - 1][COLS - 1] == 0) { //se o valor dentro da estrutura válida de linhas e colunas for == 0 
+        boolean ascending = true; // a condição crescente sendo verdadeira 
+        for (int l = 0; l < ROWS; l++) { //L de linha, sendo menor que o numero de linhas (incrementando +1)
+            for (int a = 0; a < COLS - 1; a++) { ////C de coluna, sendo menor que o numero de Colunas - 1 (incrementando +1)
+                //este nested loop permite uma varredura da matriz de linhas e colunas
+                if (nums[l][a] > nums[l][a + 1]) { //se o valor correspondente do campo da matriz for maior do que o próxim...
+                   ascending = false; //.... a condição ascending será falsa
+                    break; //fim do teste
                 }
             }
-            if (!ascending) {
-                break;
+            if (!ascending) { //se não for ascending... 
+                break; //então fim do teste
             }
         }
-        if (ascending) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Parabens!");
-            alert.setHeaderText(null);
-            alert.setContentText("Voce ganhou!");
-            alert.showAndWait();
+        if (ascending) { //caso seja ascending
+            Alert alert = new Alert(AlertType.INFORMATION); //Uma nova instancia do objeto de controle alerta da biblioteca JavaFX
+            alert.setTitle("Parabens!"); //Definindo o titulo da aba do objeto
+            alert.setHeaderText(null); //Definindo o cabeçalho como 'null'
+            alert.setContentText("Voce ganhou!"); //Definindo o conteúdo do alerta
+            alert.showAndWait(); //Definindo que irá exibir e aguardar o usuário 
         }
     }
 } 
