@@ -43,6 +43,7 @@ public class NumberPuzzle extends Application {
             for (int j = 0; j < COLS; j++) {  //iterando o valor inicializado sendo menor do que a quantidade de colunas && j++ 
                 if (i == ROWS - 1 && j == COLS - 1) { //Condicional para que o número de linhas seja igual ao número de colunas
                     // a última célula deve estar vazia
+                    //Visualizar parametros para implementação do espaço vazio dinâmico para versão 3 do jogo. Associar .MathRandom para spawn aleatório do emptyRow & emptyCol 
                     emptyRow = i; //se a ultima linha for a ultima linha, ela seta esta celula vazia para esta celula
                     emptyCol = j;  //se a ultima coluna for a ultima coluna, ela seta esta celula vazia para esta celula
                 } else {
@@ -65,6 +66,7 @@ public class NumberPuzzle extends Application {
                             }
                         }
                     });
+                    //Contador deve entrar por aqui.
                     grid.add(label, j, i); //Uma instancia do GridPane, nos argumentos do método Add(): Label a ser adicionado, Linha e coluna da celula onde o label deve ser adicionado
                 }
             }
@@ -73,6 +75,7 @@ public class NumberPuzzle extends Application {
         Scene scene = new Scene(grid, COLS * TILE_SIZE, ROWS * TILE_SIZE); //Instanciando uma nova cena, o próprio quebra cabeça com tamanho, linhas e colunas 
         primaryStage.setScene(scene); //Define a cena 
         primaryStage.setTitle("Number Puzzle"); //Dá nome a cena 
+        //Observar para implementar o contador
         primaryStage.show(); //Exibe a cena 
     }
 
