@@ -1,3 +1,5 @@
+//Feito por: Cláudio Ribeiro de Sousa Júnior; Caio Passos da Silva Moreira, Alessandra Raissa Branco Lima.
+
 package com.example;
 import javafx.application.Application; // Esta biblioteca fornece a classe Application, que é o ponto de partida para as aplicações JavaFX.
 import javafx.event.EventHandler; // Esta biblioteca fornece a interface EventHandler, que é usada para lidar com eventos em JavaFX.
@@ -7,6 +9,9 @@ import javafx.scene.control.Label; // Esta biblioteca fornece a classe Label, qu
 import javafx.scene.input.MouseEvent; // Esta biblioteca fornece a classe MouseEvent, que representa um evento do mouse em JavaFX.
 import javafx.scene.layout.GridPane; // Esta biblioteca fornece a classe GridPane, que é um gerenciador de layout que organiza nós em um padrão de grade.
 import javafx.stage.Stage; // Esta biblioteca fornece a classe Stage, que representa o contêiner de nível superior para uma aplicação JavaFX.
+import javafx.scene.control.Alert; //Esta biblioteca fornece a classe Alerta, que permite exibir mensagens atraves de uma GUI do JavaFX
+import javafx.scene.control.Alert.AlertType;  //Esta biblioteca fornece a classe Alerta, que permite exibir e escrever mensagens atraves de uma GUI do JavaFX
+
 
 public class NumberPuzzle extends Application {
     private static final int ROWS = 4; // Definindo numero de linhas
@@ -19,9 +24,9 @@ public class NumberPuzzle extends Application {
 
     public void start(Stage primaryStage) throws Exception {
         GridPane grid = new GridPane(); //Instanciando o grid do game 
-        grid.setAlignment(Pos.CENTER); // definindo o padrão de alinhamento do Grid para o centro
-        grid.setHgap(10); //Definindo o gap horizontal entre o itens para 10 px 
-        grid.setVgap(10); //Definindo o gap da altura entre os itens para 10 px 
+        grid.setAlignment(Pos.CENTER); // Método definindo o padrão de alinhamento do Grid para o centro
+        grid.setHgap(10); //Método definindo o gap horizontal entre o itens para 10 px 
+        grid.setVgap(10); //Método definindo o gap da altura entre os itens para 10 px 
 
         int[][] nums = new int[ROWS][COLS]; //Instanciando um array 2D para criação da matriz de linhas e colunas 
 
@@ -36,12 +41,12 @@ public class NumberPuzzle extends Application {
         int index = 0; //inicializando o valor do indice 
         for (int i = 0; i < ROWS; i++) { //Iterando o valor inicializando sendo menor do que a quantidade de linhas && i++ 
             for (int j = 0; j < COLS; j++) {  //iterando o valor inicializado sendo menor do que a quantidade de colunas && j++ 
-                if (i == ROWS - 1 && j == COLS - 1) { //Condicional para que o numero de linhas seja igual ao numero de colunas
+                if (i == ROWS - 1 && j == COLS - 1) { //Condicional para que o número de linhas seja igual ao número de colunas
                     // a última célula deve estar vazia
                     emptyRow = i; //se a ultima linha for a ultima linha, ela seta esta celula vazia para esta celula
                     emptyCol = j;  //se a ultima coluna for a ultima coluna, ela seta esta celula vazia para esta celula
                 } else {
-                    nums[i][j] = sequence[index++]; //Guarda um dos os numeros da sequencia em um dos campos do array. O index++ incrementa para puxar o próximo numero da sequencia 
+                    nums[i][j] = sequence[index++]; //Guarda um dos os números da sequencia em um dos campos do array. O index++ incrementa para puxar o próximo numero da sequencia 
                     Label label = new Label(Integer.toString(nums[i][j])); //cria um label para cada um dos valores (em cast para string ) da matriz pré-determinada
                     label.setPrefSize(TILE_SIZE, TILE_SIZE); //Define o tamanho do label
                     label.setAlignment(Pos.CENTER); //Define o alinhamento do label para o centro
@@ -110,6 +115,31 @@ public class NumberPuzzle extends Application {
         array[j] = temp; // "j", agora com o índice "i", é atribuido ao objeto "temp"
     }
 }
+
+public void endGame(int[][] nums) {
+    if (nums[ROWS - 1][COLS - 1] == 0) {
+        boolean ascending = true;
+        for (int l = 0; l < ROWS; l++) {
+            for (int a = 0; a < COLS - 1; a++) {
+                if (nums[l][a] > nums[l][a + 1]) {
+                   ascending = false;
+                    break;
+                }
+            }
+            if (!ascending) {
+                break;
+            }
+        }
+        if (ascending) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Parabens!");
+            alert.setHeaderText(null);
+            alert.setContentText("Voce ganhou!");
+            alert.showAndWait();
+        }
+    }
+} 
+
     
     public static void main(String[] args) {
         launch(args);  //Método main para inicializar o game 
