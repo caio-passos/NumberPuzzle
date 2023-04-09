@@ -3,17 +3,25 @@
 package com.example;
 import javafx.application.Application; // Esta biblioteca fornece a classe Application, que é o ponto de partida para as aplicações JavaFX.
 import javafx.event.EventHandler; // Esta biblioteca fornece a interface EventHandler, que é usada para lidar com eventos em JavaFX.
+import javafx.geometry.Insets;
 import javafx.geometry.Pos; // Esta biblioteca fornece a classe Pos, que é usada para especificar a posição dos nós em um layout.
 import javafx.scene.Scene; // Esta biblioteca fornece a classe Scene, que representa os elementos visuais de uma aplicação JavaFX.
 import javafx.scene.control.Label; // Esta biblioteca fornece a classe Label, que é um controle de texto não editável que pode exibir uma única linha de texto.
 import javafx.scene.input.MouseEvent; // Esta biblioteca fornece a classe MouseEvent, que representa um evento do mouse em JavaFX.
 import javafx.scene.layout.GridPane; // Esta biblioteca fornece a classe GridPane, que é um gerenciador de layout que organiza nós em um padrão de grade.
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage; // Esta biblioteca fornece a classe Stage, que representa o contêiner de nível superior para uma aplicação JavaFX.
 import javafx.scene.control.Alert; //Esta biblioteca fornece a classe Alerta, que permite exibir mensagens atraves de uma GUI do JavaFX
 import javafx.scene.control.Alert.AlertType;  //Esta biblioteca fornece a classe Alerta, que permite exibir e escrever mensagens atraves de uma GUI do JavaFX
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration; //novas bibliotecas
 
 
 public class NumberPuzzle extends Application {
+    private Label timerLabel;
+    private Timeline timeline;
+    private Duration timerDuration = Duration.ZERO;
     private static final int ROWS = 4; // Definindo numero de linhas
     private static final int COLS = 4; //Definindo o numero de colunas 
     private static final int TILE_SIZE = 100; //Define o tamanho dos quadrados do jogo
@@ -23,6 +31,7 @@ public class NumberPuzzle extends Application {
 
 
     public void start(Stage primaryStage) throws Exception {
+
         GridPane grid = new GridPane(); //Instanciando o grid do game 
         grid.setAlignment(Pos.CENTER); // Método definindo o padrão de alinhamento do Grid para o centro
         grid.setHgap(10); //Método definindo o gap horizontal entre o itens para 10 px 
@@ -38,27 +47,27 @@ public class NumberPuzzle extends Application {
         shuffleArray(sequence); //Método para aleatoriarização da sequencia de valores pre-definidas no array 2D 
 
         // insire os números na grade
-        int index = 0; //inicializando o valor do indice 
-        for (int i = 0; i < ROWS; i++) { //Iterando o valor inicializando sendo menor do que a quantidade de linhas && i++ 
-            for (int j = 0; j < COLS; j++) {  //iterando o valor inicializado sendo menor do que a quantidade de colunas && j++ 
+        int index = 0; //inicializando o valor do indice
+        for (int i = 0; i < ROWS; i++) { //Iterando o valor inicializando sendo menor do que a quantidade de linhas && i++
+            for (int j = 0; j < COLS; j++) {  //iterando o valor inicializado sendo menor do que a quantidade de colunas && j++
                 if (i == ROWS - 1 && j == COLS - 1) { //Condicional para que o número de linhas seja igual ao número de colunas
                     // a última célula deve estar vazia
-                    //Visualizar parametros para implementação do espaço vazio dinâmico para versão 3 do jogo. Associar .MathRandom para spawn aleatório do emptyRow & emptyCol 
+                    //Visualizar parametros para implementação do espaço vazio dinâmico para versão 3 do jogo. Associar .MathRandom para spawn aleatório do emptyRow & emptyCol
                     emptyRow = i; //se a ultima linha for a ultima linha, ela seta esta celula vazia para esta celula
                     emptyCol = j;  //se a ultima coluna for a ultima coluna, ela seta esta celula vazia para esta celula
                 } else {
-                    nums[i][j] = sequence[index++]; //Guarda um dos os números da sequencia em um dos campos do array. O index++ incrementa para puxar o próximo numero da sequencia 
+                    nums[i][j] = sequence[index++]; //Guarda um dos os números da sequencia em um dos campos do array. O index++ incrementa para puxar o próximo numero da sequencia
                     Label label = new Label(Integer.toString(nums[i][j])); //cria um label para cada um dos valores (em cast para string ) da matriz pré-determinada
                     label.setPrefSize(TILE_SIZE, TILE_SIZE); //Define o tamanho do label
                     label.setAlignment(Pos.CENTER); //Define o alinhamento do label para o centro
                     label.setStyle("-fx-border-color: black"); //O estilo do label: borda de cor preta
-                    label.setOnMouseClicked(new EventHandler<MouseEvent>() { //Adiciona um event listener do tipo MouseEvent, 
-                                                                            //utilizando o método para criar um eventListener para cada Label. 
+                    label.setOnMouseClicked(new EventHandler<MouseEvent>() { //Adiciona um event listener do tipo MouseEvent,
+                                                                            //utilizando o método para criar um eventListener para cada Label.
                                                                             // a classe EventHandler é utilizada para trocar o label para o lugar da Empty Label
                         public void handle(MouseEvent event) { //Passando o parametro para o MouseEvent
-                            Label clickedLabel = (Label) event.getSource(); //Recebe o clique em cada label 
-                            int clickedRow = GridPane.getRowIndex(clickedLabel); //Recebe a label da e linha do Label que recebeu o clique 
-                            int clickedCol = GridPane.getColumnIndex(clickedLabel); //Recebe a label da coluna do Label que recebeu o clique 
+                            Label clickedLabel = (Label) event.getSource(); //Recebe o clique em cada label
+                            int clickedRow = GridPane.getRowIndex(clickedLabel); //Recebe a label da e linha do Label que recebeu o clique
+                            int clickedCol = GridPane.getColumnIndex(clickedLabel); //Recebe a label da coluna do Label que recebeu o clique
                             if (isValidMove(clickedRow, clickedCol)) { //Se for um movimento válido(se pode ser movimentado para o espaço vazio)
                                 swapLabels(clickedLabel, emptyRow, emptyCol); //caso seja possível: o label clickado será alternado com o Label vazio
                                 emptyRow = clickedRow; //então, a linha vazia será atribuida a linha clickada
@@ -68,15 +77,37 @@ public class NumberPuzzle extends Application {
                     });
                     //Contador deve entrar por aqui.
                     grid.add(label, j, i); //Uma instancia do GridPane, nos argumentos do método Add(): Label a ser adicionado, Linha e coluna da celula onde o label deve ser adicionado
+
                 }
             }
         }
 
-        Scene scene = new Scene(grid, COLS * TILE_SIZE, ROWS * TILE_SIZE); //Instanciando uma nova cena, o próprio quebra cabeça com tamanho, linhas e colunas 
-        primaryStage.setScene(scene); //Define a cena 
-        primaryStage.setTitle("Number Puzzle"); //Dá nome a cena 
+        timerLabel = new Label("00:00");
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            timerDuration = timerDuration.add(Duration.seconds(1));
+            timerLabel.setText(formatDuration(timerDuration));
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+
+        grid.setHgap(10);
+        grid.setVgap(10);
+        Pane pane = new Pane(grid, timerLabel);
+        pane.setPadding(new Insets(10));
+
+        Scene scene = new Scene(pane, COLS * TILE_SIZE, ROWS * TILE_SIZE);
+
+        primaryStage.setScene(scene); //Define a cena
+        primaryStage.setTitle("Number Puzzle"); //Dá nome a cena
         //Observar para implementar o contador
-        primaryStage.show(); //Exibe a cena 
+        timeline.play();
+        primaryStage.show(); //Exibe a cena
+    }
+    private String formatDuration(Duration duration) {
+        long seconds = (long) duration.toSeconds();
+        long minutes = seconds / 60;
+        seconds = seconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
     }
 
     // Verifica se o bloco clicado pode ser movido
@@ -142,9 +173,22 @@ public void endGame(int[][] nums) { //Estrutura para o final do game
             alert.showAndWait(); //Definindo que irá exibir e aguardar o usuário 
         }
     }
-} 
+}
 
-    
+public class Chronometer extends Label {
+    private long startTime;
+
+    public Chronometer() {
+        this.startTime = System.currentTimeMillis();
+        setText("0.00");
+    }
+
+    public void update() {
+        long elapsedTime = System.currentTimeMillis() - startTime;
+        double seconds = elapsedTime / 1000.0;
+        setText(String.format("%.2f", seconds));
+    }
+}
     public static void main(String[] args) {
         launch(args);  //Método main para inicializar o game 
     }
